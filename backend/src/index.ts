@@ -31,6 +31,7 @@ app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser(process.env.COOKIE_SECRET || 'dev-cookie-secret'));
 app.use(morgan('dev'));
 app.use(rateLimit({ windowMs: 60_000, max: 120 }));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // Health
 app.get('/health', (_req, res) => {
