@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Upload</title>
+</head>
+<body>
+	<h1>Upload a File</h1>
+	<form id="form">
+		<input id="file" type="file" required />
+		<button type="submit">Upload</button>
+	</form>
+	<pre id="out"></pre>
+	<script>
+	const out = document.getElementById('out');
+	document.getElementById('form').addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const file = document.getElementById('file').files[0];
+		if (!file) { out.textContent = 'No file selected'; return; }
+		const token = localStorage.getItem('token');
+		if (!token) { out.textContent = 'No token. Please login.'; return; }
+		const fd = new FormData();
+		fd.append('file', file);
+		const res = await fetch('/api/upload', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: fd });
+		out.textContent = JSON.stringify(await res.json(), null, 2);
+	});
+	</script>
+	<p><a href="/">Home</a></p>
+</body>
+</html>
